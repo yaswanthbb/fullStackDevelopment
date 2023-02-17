@@ -1,11 +1,11 @@
 const Header = (props) =>{
   return(
-    <p>{props.course}</p>
+    <p>{props.course.name}</p>
   )
 }
 const Part = (props)=>{
   return(
-    <p>{props.part} : {props.exercisesno}</p>
+    <p>{props.part.name} : {props.part.exercises}</p>
   )
 }
 const Content = (props)=>{
@@ -13,27 +13,40 @@ const Content = (props)=>{
     // Before Refactoring the Code
     // <p>{props.part} : {props.exercise}</p>
     <div>
-      <Part part = "Fundamentals of React" exercisesno = "10"/>
-      <Part part = "Using props to pass data" exercisesno = "7"/>
-      <Part part = "State of Component" exercisesno = "14"/>
+      <Part part = {props.course.parts[0]}/>
+      <Part part = {props.course.parts[1]}/>
+      <Part part = {props.course.parts[2]}/>
     </div>
   )
 }
 const Total = (props) =>{
   return(
-    <p>Number of exercises : {props.total}</p>
+    <p>Number of exercises : {props.course.parts[0].exercises + props.course.parts[1].exercises + props.course.parts[2].exercises}</p>
   )
 }
 const App = () =>{
+  const course = {
+    name : "Half Stack Development",
+    parts : [
+      {
+        name : "Fundamentals of React",
+        exercises : 10
+      },
+      {
+        name : "Using props to pass data",
+        exercises : 7
+      },
+      {
+        name : "State of Component",
+        exercises : 14
+      }
+    ],
+  }
   return(
     <div>
-      <Header course = {"Half Stack Development"}/>
-      {/* Before Refactoring The Code */}
-      {/* {<Content part = {"Fundamentals of React"} exercise = {10}/>
-      <Content part = {"Using props to pass data"} exercise = {7}/>
-      <Content part = {"State of a component"} exercise = {14}/>} */}
-      <Content/>
-      <Total total = {10+14+7}/>
+      <Header course = {course}/>
+      <Content course = {course}/>
+      <Total course  = {course}/>
     </div>
   )
 }
