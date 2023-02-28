@@ -54,6 +54,7 @@ const App = ()=>{
   const [neutral,setNeutral] = useState(0);
   const [bad,setBad] = useState(0);
   const[points,setPoints] = useState(Array(anecdotes.length).fill(0))
+  const [max,setMax] = useState(0)
   const total = good+bad+neutral
   const average = (good - bad) / total;
   const positive = good/total * 100;
@@ -63,20 +64,23 @@ const App = ()=>{
   
   const handleAnecdotes =()=>{
     const index = Math.floor(Math.random()*anecdotes.length);
-    console.log(index)
     setSelected(index)
   }
   const handleVote = ()=>{
-    console.log("index",selected)
     const updatedPoints  = [...points] 
     updatedPoints[selected]+=1;
     setPoints(updatedPoints)
+    const updatedMax = Math.max(...updatedPoints)
+    const maxIndex = updatedPoints.indexOf(updatedMax);
+    setMax(maxIndex)
   }
   return(
     <div className="container">
       <div>
         {anecdotes[selected]} has {points[selected]}
       </div>
+      <h1>Anecdote with Most Votes</h1>
+      <p>{anecdotes[max]} has {points[max]}</p>
       <Button handleClick={handleAnecdotes} text = "Next Anecdotes"/>
       <Button handleClick={handleVote} text = "Vote"/>
       <p className="heading">Give Feedback</p>
