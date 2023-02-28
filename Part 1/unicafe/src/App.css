@@ -1,4 +1,26 @@
 .heading{
   font-size: 25px;
+}
+.container{
   font-weight: bold;
+}
+button{
+  background-color:white;
+  border-width: 0px;
+  box-shadow: 0.5px 0.5px grey;
+  border-radius: 5px;
+  margin-left:2px;
+}
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.5em 1em;
+  border: 1px solid #ddd;
+}
+
+th {
+  font-weight: bold;
+  text-align: left;
 }
