@@ -9,6 +9,9 @@ const Button = ({handleClick,text})=>{
 }
 
 const Statistics = (props)=>{
+  if(props.total === 0 ){
+    return(<div>No Feedbacks given</div>)
+  }
   return(
     <div>
     <p className="heading">Statistics</p>
@@ -21,6 +24,7 @@ const Statistics = (props)=>{
     </div>
   )
 }
+
 const App = ()=>{
   const [good,setGood] = useState(0);
   const [neutral,setNeutral] = useState(0);
