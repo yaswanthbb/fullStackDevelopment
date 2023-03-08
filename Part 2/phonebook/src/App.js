@@ -12,11 +12,9 @@ const App =()=>{
   const[filter,setFilter] = useState("")
 
   useEffect(()=>{
-    console.log("effect")
   axios
   .get("http://localhost:3001/persons")
   .then(response => {
-    console.log("promise fulfilled")
     setPersons(response.data)
   })
 
@@ -32,20 +30,49 @@ const handleNumberChange = (event) =>{
 const handleFilteredChange = (event) =>{
   setFilter(event.target.value)
 }
+const deletePerson = (id,name) =>{
+    if(window.confirm(`Delete "${name}" ?`)){
+      axios
+      .delete(`http://localhost:3001/persons/${id}`)
+      .then(()=>{
+        setPersons(persons.filter(person => person.id !== id))
+      })
+    }
+  }
 const addPerson= (event)=>{
   event.preventDefault();
-  if (persons.find(person => person.name === newName)) {
-    alert(`${newName} is already added to the phonebook`)
-    return;
+  const existingPerson = persons.find((person) => person.name.toLowerCase() === newName.toLowerCase())
+  console.log(existingPerson)
+  if (existingPerson) {
+    if (window.confirm(`${existingPerson.name} is already added to the phonebook, replace the old number with a new one?`)) {
+      const updatedPerson = { ...existingPerson, number: newNumber };
+      axios
+        .put(`http://localhost:3001/persons/${existingPerson.id}`, updatedPerson)
+        .then((response) => {
+          setPersons(
+            persons.map((person) =>
+              person.id === existingPerson.id ? response.data : person
+            )
+          );
+          setNewName("");
+          setNewNumber("");
+        });
+        return;
+    }else{
+      return;
+    }
   }
   const numberObject={
     name: newName,
-    id :persons.length+1,
     number : newNumber
   }
-  setPersons(persons.concat(numberObject));
-  setNewName('')
-  setNewNumber('')
+    axios
+    .post('http://localhost:3001/persons',numberObject)
+    .then(request => {
+      setPersons(persons.concat(request.data))
+      setNewName('')
+      setNewNumber('')
+    })
 }
 
 const filteredNames = persons.filter((person) =>person.name.toLowerCase().includes(filter.toLowerCase()));
@@ -61,7 +88,7 @@ return(
     
     <h2 className="heading">Numbers</h2>
     
-    <Persons filteredNames = {filteredNames}/>
+    <Persons deletePerson =  {deletePerson} filteredNames = {filteredNames}/>
   </div>
 )
 }
