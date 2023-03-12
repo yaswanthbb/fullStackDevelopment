@@ -19,7 +19,6 @@ const Weather = ({ selectedCountry }) => {
         });
     }
   }, [selectedCountry,api_key]);
-  console.log(weatherData)
   if (!weatherData) {
     return null;
   }
