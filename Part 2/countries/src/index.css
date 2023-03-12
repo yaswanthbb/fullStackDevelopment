@@ -1,6 +1,6 @@
 li{
   list-style-type:none;
-  font-size: 15px;
+  font-size: 18px;
 }
 .languages{
   list-style-type: disc;
@@ -10,6 +10,6 @@ p{
   font-weight: 600;
 }
 
-img{
+.flag{
   width: 200px;
 }

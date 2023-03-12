@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import Weather from "./Weather";
 const Countries = ({ newName, filteredCountries, allInfo }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
 
@@ -10,6 +10,14 @@ const Countries = ({ newName, filteredCountries, allInfo }) => {
     setSelectedCountry(countryData);
   };
 
+  useEffect(()=>{
+    if(filteredCountries.length === 1){
+      handleShowButton(filteredCountries[0])
+    }
+    else{
+      setSelectedCountry('')
+    }
+  },[filteredCountries])
   if (selectedCountry) {
     const languages = Object.values(selectedCountry.languages);
     return (
@@ -25,18 +33,19 @@ const Countries = ({ newName, filteredCountries, allInfo }) => {
             </li>
           ))}
         </ul>
-        <img src={selectedCountry.flags.png} alt="flag" />
+        <img className = "flag"src={selectedCountry.flags.png} alt="flag" />
+        <Weather selectedCountry={selectedCountry}/>
       </div>
     );
   }
   return (
     <div>
-      {Boolean(newName) && filteredCountries.length > 0 ? (
+      {Boolean(newName) && filteredCountries.length > 0 && (
         filteredCountries.length > 10 ? (
           <p>Too many matches, specify another filter</p>
         ) : (
           <div>
-            {filteredCountries.map((data) => (
+            {filteredCountries.length > 1 && filteredCountries.map((data) => (
               <div key={data}>
                 <span>{data}</span>
                 <button onClick={() => handleShowButton(data)}>show</button>
@@ -44,7 +53,7 @@ const Countries = ({ newName, filteredCountries, allInfo }) => {
             ))}
           </div>
         )
-      ) : null}
+      )}
     </div>
   );
 };
