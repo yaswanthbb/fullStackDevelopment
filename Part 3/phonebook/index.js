@@ -25,6 +25,9 @@ const persons = [
 
 const count = persons.length
 const currentTime = new Date()
+app.get('/',(request,response) => {
+  response.send("<h1>Welcome to backend</h1>")
+})
 app.get('/api/persons',(request,response)=>{
     response.json(persons)
 })
