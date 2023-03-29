@@ -78,12 +78,13 @@ app.post("/api/persons", (request, response) => {
       error : "number is missing"
     })
   }
+  
   else if (!body.name) {
     return response.status(400).json({
         error: "name is missing",
       });
   }
-  
+
   else if (persons.some(p => p.name === body.name)){
     return response.status(400).json({
       error:"name must be unique"
