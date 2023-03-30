@@ -1,7 +1,15 @@
 const express = require("express");
 const app = express();
+const morgan = require('morgan');
 
 app.use(express.json());
+
+morgan.token('req-body',(req,res)=>{
+  return JSON.stringify(req.body)
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body'));
+
 let persons = [
   {
     id: 1,
@@ -25,8 +33,8 @@ let persons = [
   },
 ];
 
-const count = persons.length;
-const currentTime = new Date();
+
+
 
 app.get("/", (request, response) => {
   response.send("<h1>Welcome to backend</h1>");
@@ -47,6 +55,8 @@ app.get("/api/persons/:id", (request, response) => {
 });
 
 app.get("/info", (request, response) => {
+  const count = persons.length;
+  const currentTime = new Date();
   response.send(`<p>Phonebook has info for ${count} people</p>
     <p>${currentTime}</p>
     `);
@@ -67,24 +77,12 @@ const generateId = () => {
 app.post("/api/persons", (request, response) => {
   const body = request.body;
 
-  if (!body.number && !body.name){
+  if (!body.number || !body.name){
     return response.status(400).json({
-      error : "name and number both are missing"
-    })
-  }
-
-  else if (!body.number){
-    return response.status(400).json({
-      error : "number is missing"
+      error : "name or number missing"
     })
   }
   
-  else if (!body.name) {
-    return response.status(400).json({
-        error: "name is missing",
-      });
-  }
-
   else if (persons.some(p => p.name === body.name)){
     return response.status(400).json({
       error:"name must be unique"
